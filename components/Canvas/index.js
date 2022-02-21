@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import styles from './Canvas.module.css';
 
 function Canvas({ isDelete, scale }) {
   const canvasRef = useRef(null);
@@ -12,14 +13,16 @@ function Canvas({ isDelete, scale }) {
     canvas.height = window.innerHeight * 0.8;
 
     const context = canvas.getContext('2d');
+    context.scale(scale, scale);
     context.lineCap = 'round';
     context.strokeStyle = 'black';
     context.lineWidth = 3;
     context.imageSmoothingQuality = 'high';
     setContext(context);
-  }, []);
+  }, [scale]);
 
   function startDraw({ nativeEvent: { clientX, clientY } }) {
+    if (isDelete) return;
     setStartLocation({ clientX, clientY });
     setUserDrawing(true);
     context.beginPath();
@@ -34,19 +37,12 @@ function Canvas({ isDelete, scale }) {
   }
 
   function draw({ nativeEvent: { clientX, clientY } }) {
-    if (!userDrawing) {
-      return;
-    }
+    if (!userDrawing || isDelete) return;
     context.lineTo(clientX, clientY);
     context.stroke();
   }
 
-  useEffect(() => {
-    context?.scale(1, 1);
-    console.log(context);
-  }, [context, scale]);
-
-  return <canvas ref={canvasRef} onMouseMove={draw} onMouseDown={startDraw} onMouseUp={finishDraw} />;
+  return <canvas className={styles.canvas} ref={canvasRef} onMouseMove={draw} onMouseDown={startDraw} onMouseUp={finishDraw} />;
 }
 
 export default Canvas;
