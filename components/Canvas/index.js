@@ -2,19 +2,28 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './Canvas.module.css';
 import { shapeArray, storeShapes } from '../../utils/storeShapes';
 
-function Canvas({ isDelete, scale, listOfShapes, setListOfShapes }) {
+function Canvas({ isDelete, scale, deleteById, listOfShapes, setListOfShapes }) {
   const canvasRef = useRef(null);
   const [context, setContext] = useState(null);
   const [startLocation, setStartLocation] = useState({});
   const [userDrawing, setUserDrawing] = useState(false);
 
   function deleteItem(x, y) {
-    console.log(x, y);
+    listOfShapes.forEach((shape, id) => {
+      shape.forEach((coord) => {
+        if (Math.round(coord.x) === Math.round(x) - 10 || Math.round(coord.y) === Math.round(y) - 10) {
+          deleteById(id);
+        }
+      });
+    });
   }
 
+  //Draw from Array
   useEffect(() => {
     if (!context) return;
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    context.scale(`1.0${scale}`, `1.0${scale}`);
+
     listOfShapes.forEach((shape) => {
       context.beginPath();
       shape.forEach((coord) => {
@@ -23,11 +32,11 @@ function Canvas({ isDelete, scale, listOfShapes, setListOfShapes }) {
       context.closePath();
       context.stroke();
     });
-  }, [listOfShapes, context]);
+  }, [listOfShapes, context, scale]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    canvas.width = window.innerWidth * 0.8;
+    canvas.width = window.innerWidth * 0.75;
     canvas.height = window.innerHeight * 0.8;
     const context = canvas.getContext('2d');
     context.lineCap = 'round';
@@ -38,18 +47,19 @@ function Canvas({ isDelete, scale, listOfShapes, setListOfShapes }) {
   }, []);
 
   function startDraw({ nativeEvent: { clientX, clientY } }) {
+    const offSetX = clientX * 0.97;
+    const offSetY = clientY * 0.8;
     if (isDelete) {
-      deleteItem(clientX, clientY);
+      deleteItem(offSetX, offSetY);
       return;
     }
-    console.log(isDelete);
-    setStartLocation({ clientX, clientY });
+    setStartLocation(offSetX, offSetY);
     setUserDrawing(true);
     context.beginPath();
-    context.moveTo(clientX, clientY);
+    context.moveTo(offSetX, offSetY);
   }
 
-  function finishDraw(e) {
+  function finishDraw() {
     if (isDelete) return;
     context.lineTo(startLocation.clientX, startLocation.clientY);
     context.stroke();
@@ -61,8 +71,10 @@ function Canvas({ isDelete, scale, listOfShapes, setListOfShapes }) {
 
   function draw({ nativeEvent: { clientX, clientY } }) {
     if (!userDrawing || isDelete) return;
-    shapeArray(clientX, clientY);
-    context.lineTo(clientX, clientY);
+    const offSetX = clientX * 0.97;
+    const offSetY = clientY * 0.8;
+    shapeArray(offSetX, offSetY);
+    context.lineTo(offSetX, offSetY);
     context.stroke();
   }
 

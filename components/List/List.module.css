@@ -9,6 +9,10 @@
   justify-content: space-between;
 }
 
+.listContainer h1 {
+  border-bottom: 1px solid white;
+}
+
 .listContainer ul {
   padding: 0;
   margin-top: 125px;
@@ -19,6 +23,16 @@
 .listContainer li {
   padding: 20px 0 10px 0;
   list-style-type: none;
+}
+
+.deleteBtn {
+  background-color: #b15c5c;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  margin-left: 5px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .deleteContainer {
