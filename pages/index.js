@@ -8,11 +8,20 @@ export default function Home() {
   const [isDeleteMode, setIsDeleteMode] = useState();
   const [scale, setScale] = useState(0);
 
-  const deleteById = (index) => setListOfShapes(listOfShapes.splice(index, 1));
+  const deleteById = (index) => {
+    console.log(index);
+    setListOfShapes(listOfShapes.splice(index, 1));
+  };
 
   return (
     <div className={styles.container}>
-      <Canvas isDelete={isDeleteMode} deleteById={deleteById} scale={scale} setListOfShapes={setListOfShapes} listOfShapes={listOfShapes} />
+      <Canvas
+        isDeleteMode={isDeleteMode}
+        deleteById={deleteById}
+        scale={scale}
+        setListOfShapes={setListOfShapes}
+        listOfShapes={listOfShapes}
+      />
       <List
         isDeleteMode={isDeleteMode}
         setIsDeleteMode={setIsDeleteMode}

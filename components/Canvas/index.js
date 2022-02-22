@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './Canvas.module.css';
 import { shapeArray, storeShapes } from '../../utils/storeShapes';
 
-function Canvas({ isDelete, scale, deleteById, listOfShapes, setListOfShapes }) {
+function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes }) {
   const canvasRef = useRef(null);
   const [context, setContext] = useState(null);
   const [startLocation, setStartLocation] = useState({});
@@ -11,20 +11,20 @@ function Canvas({ isDelete, scale, deleteById, listOfShapes, setListOfShapes }) 
   function deleteItem(x, y) {
     listOfShapes.forEach((shape, id) => {
       shape.forEach((coord) => {
-        if (Math.round(coord.x) === Math.round(x) - 10 || Math.round(coord.y) === Math.round(y) - 10) {
+        if ((Math.round(coord.x) === Math.round(x) - 10) & (Math.round(coord.y) === Math.round(y) - 10)) {
           deleteById(id);
         }
       });
     });
   }
 
-  //Draw from Array
+  // CAN I CHANGE THIS?????/????
   useEffect(() => {
     if (!context) return;
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     context.scale(`1.0${scale}`, `1.0${scale}`);
 
-    listOfShapes.forEach((shape) => {
+    listOfShapes?.forEach((shape) => {
       context.beginPath();
       shape.forEach((coord) => {
         context.lineTo(coord.x, coord.y);
@@ -49,7 +49,7 @@ function Canvas({ isDelete, scale, deleteById, listOfShapes, setListOfShapes }) 
   function startDraw({ nativeEvent: { clientX, clientY } }) {
     const offSetX = clientX * 0.97;
     const offSetY = clientY * 0.8;
-    if (isDelete) {
+    if (isDeleteMode) {
       deleteItem(offSetX, offSetY);
       return;
     }
@@ -60,7 +60,7 @@ function Canvas({ isDelete, scale, deleteById, listOfShapes, setListOfShapes }) 
   }
 
   function finishDraw() {
-    if (isDelete) return;
+    if (isDeleteMode) return;
     context.lineTo(startLocation.clientX, startLocation.clientY);
     context.stroke();
     context.closePath();
@@ -70,7 +70,7 @@ function Canvas({ isDelete, scale, deleteById, listOfShapes, setListOfShapes }) 
   }
 
   function draw({ nativeEvent: { clientX, clientY } }) {
-    if (!userDrawing || isDelete) return;
+    if (!userDrawing || isDeleteMode) return;
     const offSetX = clientX * 0.97;
     const offSetY = clientY * 0.8;
     shapeArray(offSetX, offSetY);
