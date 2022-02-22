@@ -1,17 +1,19 @@
 import styles from './List.module.css';
 
-function List({ setIsDeleteMode, scale, setScale }) {
+function List({ setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
   return (
     <div className={styles.listContainer}>
       <ul>
         <h1>Items</h1>
-        <li>Polygon 1</li>
-        <li>Polygon 2</li>
-        <li>Polygon 3</li>
+        {listOfShapes.map((item, index) => (
+          <li key={index}>
+            Polygon: {index + 1} <button onClick={deleteById.bind({}, index)}>DELETE</button>
+          </li>
+        ))}
       </ul>
       <div>
         <div className={styles.deleteContainer}>
-          <input type='checkbox' id='toggle' onClick={(e) => setIsDeleteMode(e.target.checked)} />
+          <input type='checkbox' id='toggle' onChange={(e) => setIsDeleteMode(e.target.checked)} />
           <label htmlFor='toggle'>Delete Mode</label>
         </div>
         <div className={styles.zoomContainer}>
