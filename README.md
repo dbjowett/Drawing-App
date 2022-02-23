@@ -1,6 +1,6 @@
 ## The Lunit Challenge
 
-First, install dependencies, 
+First, install dependencies: 
 ```bash
 npm install
 
