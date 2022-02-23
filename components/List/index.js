@@ -1,15 +1,19 @@
 import styles from './List.module.css';
-import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaChevronRight } from 'react-icons/fa';
+import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaGithub, FaSquare } from 'react-icons/fa';
 
 function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
   return (
     <div className={styles.sidebarContainer}>
       <ul className={styles.listContainer}>
         <h1>Shapes</h1>
-
+        {listOfShapes.length === 0 && (
+          <div className={styles.standInText}>
+            <FaSquare fontSize={6} /> Items will show here
+          </div>
+        )}
         {listOfShapes.map((item, index) => (
           <li key={index}>
-            <FaChevronRight /> Polygon {index + 1}
+            <FaSquare fontSize={6} /> Polygon {index + 1}
             <button className={styles.deleteBtn} onClick={deleteById.bind({}, index)}>
               <span className={styles.toolTip}>Delete Polygon {index + 1}</span>
               <FaTrashAlt fontSize={14} />
@@ -35,7 +39,12 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
           </button>
           Scale 1.0{scale}
         </div>
-        {/* <div>Made by: Daniel Jowett</div> */}
+        <div className={styles.me}>
+          <a href='https://www.github.com/dbjowett' rel='noreferrer' target='_blank'>
+            Daniel Jowett
+            <FaGithub fontSize={11} />
+          </a>
+        </div>
       </div>
     </div>
   );

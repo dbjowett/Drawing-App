@@ -24,6 +24,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     const zoom = `1.0${scale}`; // eg. 1.01, 1.02, etc..
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     context.setTransform(zoom, 0, 0, zoom, 0, 0);
+
     listOfShapes?.forEach((shape) => {
       context.beginPath();
       shape.forEach((coord) => {
