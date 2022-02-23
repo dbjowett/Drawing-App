@@ -29,6 +29,7 @@ export default function Home() {
         setListOfShapes={setListOfShapes}
         listOfShapes={listOfShapes}
       />
+
       <List
         isDeleteMode={isDeleteMode}
         setIsDeleteMode={setIsDeleteMode}

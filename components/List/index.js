@@ -1,15 +1,18 @@
 import styles from './List.module.css';
+import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaChevronRight } from 'react-icons/fa';
 
 function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
   return (
-    <div className={styles.listContainer}>
-      <ul>
+    <div className={styles.sidebarContainer}>
+      <ul className={styles.listContainer}>
         <h1>Shapes</h1>
+
         {listOfShapes.map((item, index) => (
           <li key={index}>
-            Polygon {index + 1}
+            <FaChevronRight /> Polygon {index + 1}
             <button className={styles.deleteBtn} onClick={deleteById.bind({}, index)}>
-              Delete Item
+              <span className={styles.toolTip}>Delete Polygon {index + 1}</span>
+              <FaTrashAlt fontSize={14} />
             </button>
           </li>
         ))}
@@ -24,10 +27,15 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
         </div>
         <div className={styles.zoomContainer}>
           <h2>Zoom</h2>
-          <button onClick={() => setScale(scale + 1)}>Increase </button>
-          <button onClick={() => setScale(Math.max(0, scale - 1))}>Decrease </button>
-          Scale: {scale}
+          <button onClick={() => setScale(scale + 1)}>
+            Increase <FaSearchPlus fontSize={15} />
+          </button>
+          <button onClick={() => setScale(Math.max(0, scale - 1))}>
+            Decrease <FaSearchMinus fontSize={15} />
+          </button>
+          Scale 1.0{scale}
         </div>
+        {/* <div>Made by: Daniel Jowett</div> */}
       </div>
     </div>
   );

@@ -1,19 +1,19 @@
-.listContainer {
+.sidebarContainer {
   height: 100vh;
   width: 20vw;
   background-color: #1d1c2b;
-  color: white;
+  color: rgb(244, 244, 244);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 }
 
-.listContainer h1 {
+.sidebarContainer h1 {
   text-align: center;
 }
 
-.listContainer ul {
+.listContainer {
   padding: 0;
   margin-top: 125px;
   display: flex;
@@ -24,16 +24,53 @@
 .listContainer li {
   padding: 20px 0 10px 0;
   list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .deleteBtn {
   background-color: #b15c5c;
   border: none;
   color: white;
+  display: inline-block;
+  position: relative;
+  flex-direction: row;
+  align-items: center;
   padding: 5px 10px;
   margin-left: 15px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/*  Tooltip on Hover delete button */
+.toolTip {
+  visibility: hidden;
+  position: absolute;
+  width: 90px;
+  font-size: 0.8rem;
+  background-color: rgba(115, 115, 115);
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  z-index: 1;
+  top: 32px;
+  left: -95px;
+}
+
+.toolTip::after {
+  position: absolute;
+  content: ' ';
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgba(115, 115, 115) transparent;
+  bottom: 100%;
+  left: 50%;
+}
+
+.deleteBtn:hover .toolTip {
+  visibility: visible;
 }
 
 .deleteBtn:hover {
@@ -73,13 +110,21 @@
 
 .zoomContainer button {
   width: 100px;
-  padding: 5px 0;
+  padding: 10px 0;
   margin: 5px;
   border: none;
   background-color: #5cb18d;
-  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: rgb(244, 244, 244);
   border-radius: 5px;
   cursor: pointer;
+}
+
+.zoomContainer button svg {
+  margin-left: 8px;
 }
 
 .zoomContainer button:hover {

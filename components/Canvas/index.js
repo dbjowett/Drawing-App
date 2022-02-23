@@ -12,7 +12,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     if (!isDeleteMode) return;
     listOfShapes.forEach((shape, id) => {
       shape.forEach((coord) => {
-        if ((Math.round(coord.x) === Math.round(x) - 10) & (Math.round(coord.y) === Math.round(y) - 10)) {
+        if (Math.abs(coord.x - x) < 15 && Math.abs(coord.y - y) < 15 && Math.abs(coord.x - x) + Math.abs(coord.y - y) < 150) {
           deleteById(id);
         }
       });
@@ -40,7 +40,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     canvas.height = window.innerHeight * 0.8;
     const context = canvas.getContext('2d');
     context.lineCap = 'round';
-    context.strokeStyle = 'black';
+    context.strokeStyle = '#1d1c2b';
     context.lineWidth = 5;
     context.imageSmoothingQuality = 'high';
     setContext(context);
