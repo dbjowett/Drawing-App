@@ -9,8 +9,15 @@ export default function Home() {
   const [scale, setScale] = useState(0);
 
   const deleteById = (index) => {
-    console.log(index);
-    setListOfShapes(listOfShapes.splice(index, 1));
+    const newArray = [];
+    listOfShapes.map((shape, i) => {
+      if (i === index) {
+        return;
+      } else {
+        newArray.push(shape);
+      }
+    });
+    setListOfShapes(newArray);
   };
 
   return (

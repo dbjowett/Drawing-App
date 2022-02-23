@@ -4,9 +4,9 @@ export const shapeArray = (x, y) => {
   arr.push({ x, y });
 };
 
-export const arrlist = [];
 /// OnMouseOff
 export const storeShapes = () => {
+  let arrlist = [];
   arrlist.push(arr);
   arr = [];
   return arrlist;

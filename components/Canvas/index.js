@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import styles from './Canvas.module.css';
 import { shapeArray, storeShapes } from '../../utils/storeShapes';
 
@@ -9,6 +9,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
   const [userDrawing, setUserDrawing] = useState(false);
 
   function deleteItem(x, y) {
+    if (!isDeleteMode) return;
     listOfShapes.forEach((shape, id) => {
       shape.forEach((coord) => {
         if ((Math.round(coord.x) === Math.round(x) - 10) & (Math.round(coord.y) === Math.round(y) - 10)) {
@@ -18,12 +19,11 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     });
   }
 
-  // CAN I CHANGE THIS?????/????
   useEffect(() => {
     if (!context) return;
+    const zoom = `1.0${scale}`; // eg. 1.01, 1.02, etc..
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    context.scale(`1.0${scale}`, `1.0${scale}`);
-
+    context.setTransform(zoom, 0, 0, zoom, 0, 0);
     listOfShapes?.forEach((shape) => {
       context.beginPath();
       shape.forEach((coord) => {
@@ -41,7 +41,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     const context = canvas.getContext('2d');
     context.lineCap = 'round';
     context.strokeStyle = 'black';
-    context.lineWidth = 3;
+    context.lineWidth = 5;
     context.imageSmoothingQuality = 'high';
     setContext(context);
   }, []);
@@ -59,16 +59,6 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     context.moveTo(offSetX, offSetY);
   }
 
-  function finishDraw() {
-    if (isDeleteMode) return;
-    context.lineTo(startLocation.clientX, startLocation.clientY);
-    context.stroke();
-    context.closePath();
-    setUserDrawing(false);
-    const arrlist = storeShapes();
-    setListOfShapes((prev) => [...(prev, arrlist)]);
-  }
-
   function draw({ nativeEvent: { clientX, clientY } }) {
     if (!userDrawing || isDeleteMode) return;
     const offSetX = clientX * 0.97;
@@ -76,6 +66,19 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     shapeArray(offSetX, offSetY);
     context.lineTo(offSetX, offSetY);
     context.stroke();
+  }
+
+  function finishDraw() {
+    if (isDeleteMode) return;
+    context.lineTo(startLocation.clientX, startLocation.clientY);
+    context.stroke();
+    context.closePath();
+    setUserDrawing(false);
+    const arrlist = storeShapes();
+    setListOfShapes((prev) => {
+      const newArray = prev.concat(arrlist);
+      return newArray;
+    });
   }
 
   return <canvas className={styles.canvas} ref={canvasRef} onMouseMove={draw} onMouseDown={startDraw} onMouseUp={finishDraw} />;
