@@ -2,6 +2,6 @@
   width: 75vw;
   border-radius: 10px;
   margin: 15px;
-  background-color: rgb(244, 244, 244);
+  background-color: var(--bgGrey);
   cursor: pointer;
 }

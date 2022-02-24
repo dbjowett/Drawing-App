@@ -1,5 +1,5 @@
 import styles from './List.module.css';
-import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaGithub, FaSquare, FaUndo } from 'react-icons/fa';
+import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaGithub, FaSquare, FaUndo, FaPen, FaEraser } from 'react-icons/fa';
 
 function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
   let currentScale;
@@ -11,7 +11,7 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
   return (
     <div className={styles.sidebarContainer}>
       <ul className={styles.listContainer}>
-        <h1>Shapes</h1>
+        <h2 className={styles.shapeHeader}>Shapes</h2>
         {listOfShapes.length === 0 && (
           <div className={styles.standInText}>
             <FaSquare fontSize={6} /> Items will show here
@@ -21,8 +21,8 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
           <li key={index}>
             <FaSquare fontSize={6} /> Polygon {index + 1}
             <button className={styles.deleteBtn} onClick={deleteById.bind({}, index)}>
-              <span className={styles.toolTip}>Delete Polygon {index + 1}</span>
-              <FaTrashAlt fontSize={14} />
+              <span className={styles.toolTip}>Delete</span>
+              <FaTrashAlt fontSize={12} />
             </button>
           </li>
         ))}
@@ -35,6 +35,7 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
       <div>
         <div className={styles.deleteContainer}>
           <label htmlFor='toggle' className={styles.toggle}>
+            <span>{isDeleteMode ? <FaEraser fontSize={20} /> : <FaPen fontSize={20} />}</span>
             <h2>{isDeleteMode ? 'Delete ' : 'Draw '}Mode</h2>
             <input type='checkbox' id='toggle' value={isDeleteMode} onChange={(e) => setIsDeleteMode(e.target.checked)} />
             <div className={styles.slider}></div>

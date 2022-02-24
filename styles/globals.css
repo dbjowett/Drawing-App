@@ -1,11 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+:root {
+  --green: #5cb18d;
+  --greenhv: #4f9a7b;
+  --red: #b15c5c;
+  --redhv: #9e5353;
+  --bgGrey: rgb(248, 248, 248);
+  --blue: #1d1c2b;
+  --bdrad: 10px;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: Lato, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
-  background-color: #1d1c2b;
+  background-color: var(--blue);
 }
 
 a {
