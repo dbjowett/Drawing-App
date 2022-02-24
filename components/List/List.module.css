@@ -11,7 +11,8 @@
 
 .sidebarContainer h1 {
   text-align: center;
-  margin: 10px;
+  margin: 10px 0 30px 0;
+  border-bottom: 3px solid #4f9a7b;
 }
 
 .standInText {
@@ -148,7 +149,28 @@
   background-color: #4f9a7b;
 }
 
-/*  Custom Toggle for Draw and Delete */
+/* Reset Button */
+.zoomContainer button:last-of-type {
+  font-size: 0.75rem;
+  padding: 7px;
+  margin: 15px 0 -4px 0;
+  width: 30%;
+  flex-direction: column;
+  background-color: #aa5858;
+  color: white;
+}
+
+/* FIX THIS */
+.resetScaleBtn svg:last-of-type {
+  margin-left: 0px;
+  margin-top: 2px;
+}
+.resetScaleBtn:hover {
+  background-color: #b26666;
+  transition: background-color 200ms linear;
+}
+
+/*//////////////////  Custom Draw & Delete Toggle //////////////////*/
 .toggle {
   --width: 40px;
   --height: calc(var(--width) / 2);

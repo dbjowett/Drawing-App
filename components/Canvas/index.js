@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useLayoutEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Canvas.module.css';
 import { shapeArray, storeShapes } from '../../utils/storeShapes';
 
@@ -21,9 +21,12 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
 
   useEffect(() => {
     if (!context) return;
-    const zoom = `1.0${scale}`; // eg. 1.01, 1.02, etc..
+    let zoom;
+    scale >= 10 ? (zoom = `1.${scale}`) : (zoom = `1.0${scale}`);
+    const skew = `-${scale}0` * 0.4;
+
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    context.setTransform(zoom, 0, 0, zoom, 0, 0);
+    context.setTransform(zoom, 0, 0, zoom, skew, skew);
 
     listOfShapes?.forEach((shape) => {
       context.beginPath();

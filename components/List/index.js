@@ -1,7 +1,10 @@
 import styles from './List.module.css';
-import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaGithub, FaSquare } from 'react-icons/fa';
+import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaGithub, FaSquare, FaUndo } from 'react-icons/fa';
 
-function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
+function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes }) {
+  let currentScale;
+  scale >= 10 ? (currentScale = `1.${scale}`) : (currentScale = `1.0${scale}`);
+
   return (
     <div className={styles.sidebarContainer}>
       <ul className={styles.listContainer}>
@@ -37,7 +40,10 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
           <button onClick={() => setScale(Math.max(0, scale - 1))}>
             Decrease <FaSearchMinus fontSize={15} />
           </button>
-          Scale 1.0{scale}
+          Scale {currentScale}
+          <button className={styles.resetScaleBtn}>
+            Reset <FaUndo fontSize={9} />
+          </button>
         </div>
         <div className={styles.me}>
           <a href='https://www.github.com/dbjowett' rel='noreferrer' target='_blank'>
