@@ -12,7 +12,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     if (!isDeleteMode) return;
     listOfShapes.forEach((shape, id) => {
       shape.forEach((coord) => {
-        if (Math.abs(coord.x - x) < 15 && Math.abs(coord.y - y) < 15 && Math.abs(coord.x - x) + Math.abs(coord.y - y) < 150) {
+        if (Math.abs(coord.x - x) < 15 && Math.abs(coord.y - y) < 15 && Math.abs(coord.x - x) + Math.abs(coord.y - y) < 160) {
           deleteById(id);
         }
       });

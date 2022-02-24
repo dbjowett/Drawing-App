@@ -1,3 +1,4 @@
+/* Whole container */
 .sidebarContainer {
   height: 100vh;
   width: 20vw;
@@ -15,6 +16,7 @@
   border-bottom: 3px solid #4f9a7b;
 }
 
+/* Text shown when no Polygons to display */
 .standInText {
   display: flex;
   align-items: center;
@@ -24,6 +26,7 @@
   margin-right: 7px;
 }
 
+/* Container of all Polygons, including H1 & Button */
 .listContainer {
   padding: 0;
   margin-top: 40px;
@@ -47,6 +50,7 @@
   margin-right: 7px;
 }
 
+/* Delete Polygon Button */
 .deleteBtn {
   background-color: #b15c5c;
   border: none;
@@ -59,6 +63,31 @@
   margin-left: 15px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/* Clear canvas Button */
+.clearCanvasBtn {
+  margin-top: 10px;
+  width: 100%;
+  height: 35px;
+  border: 2px solid #9e5353;
+  border-radius: 5px;
+  color: white;
+  background-color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.clearCanvasBtn:hover {
+  transition: background-color 200ms;
+  background-color: #9e5353;
+}
+
+.clearCanvasBtn svg {
+  margin-left: 5px;
 }
 
 /*  Tooltip on Hover delete button */
@@ -113,6 +142,7 @@
   margin: 8px;
 }
 
+/* ZOOM Controls container */
 .zoomContainer {
   display: flex;
   flex-direction: column;
@@ -180,6 +210,10 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.toggle h2 {
+  margin: 10px 0;
 }
 
 .toggle input {

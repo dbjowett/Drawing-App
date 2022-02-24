@@ -1,9 +1,12 @@
 import styles from './List.module.css';
 import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaGithub, FaSquare, FaUndo } from 'react-icons/fa';
 
-function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes }) {
+function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
   let currentScale;
   scale >= 10 ? (currentScale = `1.${scale}`) : (currentScale = `1.0${scale}`);
+
+  const resetZoom = () => setScale(0);
+  const clearCanvas = () => setListOfShapes([]);
 
   return (
     <div className={styles.sidebarContainer}>
@@ -23,6 +26,11 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
             </button>
           </li>
         ))}
+        {listOfShapes.length > 1 && (
+          <button className={styles.clearCanvasBtn} onClick={clearCanvas}>
+            Clear Canvas
+          </button>
+        )}
       </ul>
       <div>
         <div className={styles.deleteContainer}>
@@ -41,7 +49,7 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
             Decrease <FaSearchMinus fontSize={15} />
           </button>
           Scale {currentScale}
-          <button className={styles.resetScaleBtn}>
+          <button className={styles.resetScaleBtn} onClick={resetZoom}>
             Reset <FaUndo fontSize={9} />
           </button>
         </div>
