@@ -12,7 +12,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     if (!isDeleteMode) return;
     listOfShapes.forEach((shape, id) => {
       shape.forEach((coord) => {
-        if (Math.abs(coord.x - x) < 15 && Math.abs(coord.y - y) < 15 && Math.abs(coord.x - x) + Math.abs(coord.y - y) < 160) {
+        if (coord.x - x < 15 && coord.y - y < 15) {
           deleteById(id);
         }
       });
@@ -21,12 +21,10 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
 
   useEffect(() => {
     if (!context) return;
-    let zoom;
-    scale >= 10 ? (zoom = `1.${scale}`) : (zoom = `1.0${scale}`);
-    const skew = `-${scale}0` * 0.4;
+    const skew = `-${(scale - 1) * 400}`;
 
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    context.setTransform(zoom, 0, 0, zoom, skew, skew);
+    context.setTransform(scale, 0, 0, scale, skew, skew);
 
     listOfShapes?.forEach((shape) => {
       context.beginPath();
@@ -41,7 +39,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
   useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth * 0.75;
-    canvas.height = window.innerHeight * 0.8;
+    canvas.height = window.innerHeight - 30;
     const context = canvas.getContext('2d');
     context.lineCap = 'round';
     context.strokeStyle = '#1d1c2b';
@@ -50,26 +48,23 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     setContext(context);
   }, []);
 
-  function startDraw({ nativeEvent: { clientX, clientY } }) {
-    const offSetX = clientX * 0.97;
-    const offSetY = clientY * 0.8;
-    if (isDeleteMode) {
-      deleteItem(offSetX, offSetY);
-      return;
-    }
-    setStartLocation(offSetX, offSetY);
-    setUserDrawing(true);
-    context.beginPath();
-    context.moveTo(offSetX, offSetY);
+  function draw({ nativeEvent: { offsetX, offsetY } }) {
+    if (!userDrawing || isDeleteMode) return;
+    shapeArray(offsetX, offsetY);
+    context.lineTo(offsetX, offsetY);
+    context.stroke();
   }
 
-  function draw({ nativeEvent: { clientX, clientY } }) {
-    if (!userDrawing || isDeleteMode) return;
-    const offSetX = clientX * 0.97;
-    const offSetY = clientY * 0.8;
-    shapeArray(offSetX, offSetY);
-    context.lineTo(offSetX, offSetY);
-    context.stroke();
+  function startDraw({ nativeEvent: { offsetX, offsetY } }) {
+    if (isDeleteMode) {
+      deleteItem(offsetX, offsetY);
+      return;
+    }
+
+    setStartLocation(offsetX, offsetY);
+    setUserDrawing(true);
+    context.beginPath();
+    context.moveTo(offsetX, offsetY);
   }
 
   function finishDraw() {

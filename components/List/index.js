@@ -2,10 +2,9 @@ import styles from './List.module.css';
 import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaGithub, FaSquare, FaUndo, FaPen, FaEraser } from 'react-icons/fa';
 
 function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
-  let currentScale;
-  scale >= 10 ? (currentScale = `1.${scale}`) : (currentScale = `1.0${scale}`);
+  const currentScale = scale.toFixed(2);
 
-  const resetZoom = () => setScale(0);
+  const resetZoom = () => setScale(1);
   const clearCanvas = () => setListOfShapes([]);
 
   return (
@@ -43,10 +42,10 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
         </div>
         <div className={styles.zoomContainer}>
           <h2>Zoom</h2>
-          <button onClick={() => setScale(scale + 1)}>
+          <button onClick={() => setScale(scale + 0.01)}>
             Increase <FaSearchPlus fontSize={15} />
           </button>
-          <button onClick={() => setScale(Math.max(0, scale - 1))}>
+          <button onClick={() => setScale(Math.max(1, scale - 0.01))}>
             Decrease <FaSearchMinus fontSize={15} />
           </button>
           Scale {currentScale}
