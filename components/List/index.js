@@ -17,9 +17,9 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
           </div>
         )}
         {listOfShapes.map((item, index) => (
-          <li key={index}>
+          <li key={item}>
             <FaSquare fontSize={6} /> Polygon {index + 1}
-            <button className={styles.deleteBtn} onClick={deleteById.bind({}, index)}>
+            <button className={styles.deleteBtn} onClick={() => deleteById(index)}>
               <span className={styles.toolTip}>Delete</span>
               <FaTrashAlt fontSize={12} />
             </button>
