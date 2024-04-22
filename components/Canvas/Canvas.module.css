@@ -1,7 +1,7 @@
 .canvas {
   width: 75vw;
   border-radius: 10px;
-  margin: 15px;
+  margin: 16px;
   background-color: var(--bgGrey);
   cursor: pointer;
 }

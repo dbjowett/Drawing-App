@@ -1,5 +1,5 @@
+import { FaEraser, FaGithub, FaPen, FaSearchMinus, FaSearchPlus, FaSquare, FaTrashAlt, FaUndo } from 'react-icons/fa';
 import styles from './List.module.css';
-import { FaSearchPlus, FaSearchMinus, FaTrashAlt, FaGithub, FaSquare, FaUndo, FaPen, FaEraser } from 'react-icons/fa';
 
 function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
   const currentScale = scale.toFixed(2);
@@ -9,8 +9,8 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
 
   return (
     <div className={styles.sidebarContainer}>
+      <h2 className={styles.shapeHeader}>Shapes</h2>
       <ul className={styles.listContainer}>
-        <h2 className={styles.shapeHeader}>Shapes</h2>
         {listOfShapes.length === 0 && (
           <div className={styles.standInText}>
             <FaSquare fontSize={6} /> Items will show here
@@ -33,10 +33,10 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
       </ul>
       <div>
         <div className={styles.deleteContainer}>
-          <label htmlFor='toggle' className={styles.toggle}>
+          <label htmlFor="toggle" className={styles.toggle}>
             <span>{isDeleteMode ? <FaEraser fontSize={20} /> : <FaPen fontSize={20} />}</span>
             <h2>{isDeleteMode ? 'Delete ' : 'Draw '}Mode</h2>
-            <input type='checkbox' id='toggle' value={isDeleteMode} onChange={(e) => setIsDeleteMode(e.target.checked)} />
+            <input type="checkbox" id="toggle" value={isDeleteMode} onChange={(e) => setIsDeleteMode(e.target.checked)} />
             <div className={styles.slider}></div>
           </label>
         </div>
@@ -54,7 +54,7 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
           </button>
         </div>
         <div className={styles.me}>
-          <a href='https://www.github.com/dbjowett' rel='noreferrer' target='_blank'>
+          <a href="https://www.github.com/dbjowett" rel="noreferrer" target="_blank">
             Daniel Jowett
             <FaGithub fontSize={11} />
           </a>
