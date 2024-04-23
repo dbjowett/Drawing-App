@@ -35,14 +35,16 @@
 .listContainer {
   width: 90%;
   padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
   min-height: 220px;
   overflow-y: auto;
 }
 .listContainer li {
-  padding: 16px 0;
+  padding: 0 0 16px 0;
   list-style-type: none;
   display: flex;
   flex-direction: row;
@@ -70,7 +72,7 @@
 
 /* Clear canvas Button */
 .clearCanvasBtn {
-  margin-top: 12px;
+  margin: 16px 0;
   width: 100%;
   min-height: 36px;
   border: none;
@@ -132,8 +134,14 @@
   margin-top: 3px;
 }
 
+.lowerContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .deleteContainer {
-  margin-bottom: 20px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -142,8 +150,7 @@
   color: black;
   padding: 22px 20px 20px 20px;
   border-radius: var(--bdrad);
-  width: 18vw;
-  max-width: 230px;
+  width: 100%;
 }
 
 .deleteContainer h2 {
@@ -154,14 +161,12 @@
 .zoomContainer {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
   justify-content: center;
   align-items: center;
   background-color: var(--bgGrey);
   color: black;
   padding: 0 20px 20px 20px;
   border-radius: var(--bdrad);
-  margin-bottom: 10px;
 }
 
 .zoomContainer button {

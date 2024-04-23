@@ -1,11 +1,18 @@
+import { useEffect, useRef } from 'react';
 import { FaEraser, FaGithub, FaPen, FaSearchMinus, FaSearchPlus, FaSquare, FaTrashAlt, FaUndo } from 'react-icons/fa';
 import styles from './List.module.css';
 
 function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
   const currentScale = scale.toFixed(2);
+  const scrollRef = useRef(null);
 
   const resetZoom = () => setScale(1);
   const clearCanvas = () => setListOfShapes([]);
+
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'start' });
+  }, [listOfShapes, scrollRef]);
 
   return (
     <div className={styles.sidebarContainer}>
@@ -25,13 +32,14 @@ function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, list
             </button>
           </li>
         ))}
-        {listOfShapes.length > 1 && (
-          <button className={styles.clearCanvasBtn} onClick={clearCanvas}>
-            Clear Canvas
-          </button>
-        )}
+        <div ref={scrollRef}></div>
       </ul>
-      <div>
+      {listOfShapes.length > 1 && (
+        <button className={styles.clearCanvasBtn} onClick={clearCanvas}>
+          Clear Canvas
+        </button>
+      )}
+      <div className={styles.lowerContainer}>
         <div className={styles.deleteContainer}>
           <label htmlFor="toggle" className={styles.toggle}>
             <span>{isDeleteMode ? <FaEraser fontSize={20} /> : <FaPen fontSize={20} />}</span>
