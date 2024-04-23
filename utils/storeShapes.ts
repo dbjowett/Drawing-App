@@ -1,4 +1,9 @@
-const arr = [];
+interface Shape {
+  x: number;
+  y: number;
+}
+
+let arr: Shape[] = [];
 //OnDraw
 export const shapeArray = (x, y) => {
   arr.push({ x, y });
@@ -6,7 +11,7 @@ export const shapeArray = (x, y) => {
 
 /// OnMouseOff
 export const storeShapes = () => {
-  let arrlist = [];
+  let arrlist: Shape[][] = [];
   arrlist.push(arr);
   arr = [];
   return arrlist;
