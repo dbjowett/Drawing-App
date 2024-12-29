@@ -6,11 +6,12 @@ import List from '../components/List';
 
 export default function Home() {
   const [listOfShapes, setListOfShapes] = useState([]);
-  const [isDeleteMode, setIsDeleteMode] = useState();
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [scale, setScale] = useState(1);
 
-  const deleteById = (index) => {
-    setListOfShapes(listOfShapes.filter((item, ind) => item[ind] !== item[index]));
+  const deleteById = (index: number) => {
+    const filteredList = listOfShapes.filter((item, ind) => item[ind] !== item[index]);
+    setListOfShapes(filteredList);
   };
 
   return (

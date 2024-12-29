@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import styles from './Canvas.module.css';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 import { shapeArray, storeShapes } from '../../utils/storeShapes';
+import styles from './Canvas.module.css';
 
 function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes }) {
-  const canvasRef = useRef(null);
-  const [context, setContext] = useState(null);
-  const [startLocation, setStartLocation] = useState({});
-  const [userDrawing, setUserDrawing] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+  const [startLocation, setStartLocation] = useState<{ clientX: number; clientY: number }>(null);
+  const [userDrawing, setUserDrawing] = useState<boolean>(false);
 
   function deleteItem(x, y) {
     if (!isDeleteMode) return;
@@ -21,7 +21,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
 
   useEffect(() => {
     if (!context) return;
-    const skew = `-${(scale - 1) * 400}`;
+    const skew = Number(`-${(scale - 1) * 400}`);
 
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     context.setTransform(scale, 0, 0, scale, skew, skew);
@@ -48,20 +48,21 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
     setContext(context);
   }, []);
 
-  function draw({ nativeEvent: { offsetX, offsetY } }) {
+  function draw({ nativeEvent: { offsetX, offsetY } }: MouseEvent<HTMLCanvasElement>) {
     if (!userDrawing || isDeleteMode) return;
+    console.log('Drawing', offsetX, offsetY);
     shapeArray(offsetX, offsetY);
     context.lineTo(offsetX, offsetY);
     context.stroke();
   }
 
-  function startDraw({ nativeEvent: { offsetX, offsetY } }) {
+  function startDraw({ nativeEvent: { offsetX, offsetY } }: MouseEvent<HTMLCanvasElement>) {
     if (isDeleteMode) {
       deleteItem(offsetX, offsetY);
       return;
     }
 
-    setStartLocation(offsetX, offsetY);
+    setStartLocation({ clientX: offsetX, clientY: offsetY });
     setUserDrawing(true);
     context.beginPath();
     context.moveTo(offsetX, offsetY);
