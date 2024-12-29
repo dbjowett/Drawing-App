@@ -1,8 +1,8 @@
 import { MouseEvent, useEffect, useRef, useState } from 'react';
 
+import { useTempShapes } from '../../hooks/useTempShapes';
 import { useShapeStore } from '../../store';
 import { DrawnShape, ShapeCoords } from '../../types';
-import { shapeArray, storeShapes } from '../../utils/storeShapes';
 import styles from './Canvas.module.css';
 
 function Canvas() {
@@ -22,11 +22,17 @@ function Canvas() {
 
   const deleteById = (index: number) => useShapeStore.setState({ shapes: listOfShapes.filter((item, ind) => item[ind] !== item[index]) });
 
+  const { getTempShapes, addTempShape } = useTempShapes();
+
   function deleteItem(x: number, y: number) {
     if (!isDeleteMode) return;
+    const DISTANCE_THRESHOLD = 15;
+
     listOfShapes.forEach((shape, id) => {
       shape.forEach((coord) => {
-        if (coord.x - x < 15 && coord.y - y < 15) {
+        const distance = Math.sqrt(Math.pow(coord.x - x, 2) + Math.pow(coord.y - y, 2));
+
+        if (distance < DISTANCE_THRESHOLD) {
           deleteById(id);
         }
       });
@@ -52,9 +58,7 @@ function Canvas() {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    // Set canvas
     const canvas = canvasRef.current;
-
     canvas.width = window.innerWidth * 0.75;
     canvas.height = window.innerHeight - 30;
     const context = canvas.getContext('2d');
@@ -68,7 +72,7 @@ function Canvas() {
 
   function draw({ nativeEvent: { offsetX, offsetY } }: MouseEvent<HTMLCanvasElement>) {
     if (!userDrawing || isDeleteMode) return;
-    shapeArray(offsetX, offsetY);
+    addTempShape({ x: offsetX, y: offsetY });
     if (!context) return;
 
     context.lineTo(offsetX, offsetY);
@@ -77,6 +81,7 @@ function Canvas() {
 
   function startDraw({ nativeEvent: { offsetX, offsetY } }: MouseEvent<HTMLCanvasElement>) {
     if (isDeleteMode) {
+      console.log(`Deleting with offsetX: ${offsetX} and offsetY:  ${offsetY}`);
       deleteItem(offsetX, offsetY);
       return;
     }
@@ -94,7 +99,7 @@ function Canvas() {
     context.stroke();
     context.closePath();
     setUserDrawing(false);
-    const arrlist = storeShapes();
+    const arrlist = getTempShapes();
     addShapes(arrlist);
   }
 

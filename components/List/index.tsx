@@ -35,8 +35,8 @@ function List() {
           </div>
         )}
         {listOfShapes.length > 0 &&
-          listOfShapes.map((item, index) => (
-            <li key={item}>
+          listOfShapes.map((_, index) => (
+            <li key={index}>
               <FaSquare fontSize={6} /> Polygon {index + 1}
               <button className={styles.deleteBtn} onClick={() => deleteById(index)}>
                 <span className={styles.toolTip}>Delete</span>
