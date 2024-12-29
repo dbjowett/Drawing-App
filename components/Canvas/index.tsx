@@ -1,11 +1,20 @@
-import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { Dispatch, MouseEvent, SetStateAction, useEffect, useRef, useState } from 'react';
+import { DrawnShape, ShapeCoords } from '../../pages';
 import { shapeArray, storeShapes } from '../../utils/storeShapes';
 import styles from './Canvas.module.css';
 
-function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes }) {
+interface CanvasProps {
+  isDeleteMode: boolean;
+  scale: number;
+  deleteById: (arg: number) => void;
+  listOfShapes: DrawnShape[];
+  setListOfShapes: Dispatch<SetStateAction<DrawnShape[]>>;
+}
+
+function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-  const [startLocation, setStartLocation] = useState<{ clientX: number; clientY: number }>(null);
+  const [startLocation, setStartLocation] = useState<ShapeCoords>(null);
   const [userDrawing, setUserDrawing] = useState<boolean>(false);
 
   function deleteItem(x, y) {
@@ -37,6 +46,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
   }, [listOfShapes, context, scale]);
 
   useEffect(() => {
+    // Set canvas
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth * 0.75;
     canvas.height = window.innerHeight - 30;
@@ -50,7 +60,6 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
 
   function draw({ nativeEvent: { offsetX, offsetY } }: MouseEvent<HTMLCanvasElement>) {
     if (!userDrawing || isDeleteMode) return;
-    console.log('Drawing', offsetX, offsetY);
     shapeArray(offsetX, offsetY);
     context.lineTo(offsetX, offsetY);
     context.stroke();
@@ -62,7 +71,7 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
       return;
     }
 
-    setStartLocation({ clientX: offsetX, clientY: offsetY });
+    setStartLocation({ x: offsetX, y: offsetY });
     setUserDrawing(true);
     context.beginPath();
     context.moveTo(offsetX, offsetY);
@@ -70,13 +79,13 @@ function Canvas({ isDeleteMode, scale, deleteById, listOfShapes, setListOfShapes
 
   function finishDraw() {
     if (isDeleteMode) return;
-    context.lineTo(startLocation.clientX, startLocation.clientY);
+    context.lineTo(startLocation.x, startLocation.y);
     context.stroke();
     context.closePath();
     setUserDrawing(false);
     const arrlist = storeShapes();
     setListOfShapes((prev) => {
-      const newArray = prev.concat(arrlist);
+      const newArray = [...prev, ...arrlist];
       return newArray;
     });
   }
