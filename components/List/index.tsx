@@ -1,10 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { FaEraser, FaGithub, FaPen, FaSearchMinus, FaSearchPlus, FaSquare, FaTrashAlt, FaUndo } from 'react-icons/fa';
+import { useShapeStore } from '../../store';
 import styles from './List.module.css';
 
-function List({ isDeleteMode, setIsDeleteMode, deleteById, scale, setScale, listOfShapes, setListOfShapes }) {
+function List({ deleteById, listOfShapes, setListOfShapes }) {
+  const scale = useShapeStore((state) => state.scale);
+  const isDeleteMode = useShapeStore((state) => state.isDeleteMode);
+  const setScale = (num: number) => useShapeStore.setState({ scale: num });
+  const setIsDeleteMode = (bool: boolean) => useShapeStore.setState({ isDeleteMode: bool });
+
   const currentScale = scale.toFixed(2);
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const resetZoom = () => setScale(1);
   const clearCanvas = () => setListOfShapes([]);
