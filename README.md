@@ -1,15 +1,13 @@
 First, install dependencies: 
 ```bash
-npm install
+pnpm install
 
 ```
 
-Then, run the development server:
+Then, run the dev server:
 
 ```bash
-npm run dev
-# or
-yarn dev
+pnpm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
