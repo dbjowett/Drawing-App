@@ -94,13 +94,16 @@ function Canvas() {
         context.lineWidth = 5;
         context.imageSmoothingQuality = 'high';
 
+        const skew = Number(`-${(scale - 1) * 400}`);
+        context.setTransform(scale, 0, 0, scale, skew, skew);
+
         redrawShapes();
       }
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [context]);
+  }, [context, scale, listOfShapes]);
 
   function draw({ nativeEvent: { offsetX, offsetY } }: MouseEvent<HTMLCanvasElement>) {
     if (!userDrawing || isDeleteMode) return;
