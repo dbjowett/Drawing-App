@@ -20,7 +20,10 @@ function Canvas() {
   const [startLocation, setStartLocation] = useState<ShapeCoords | null>(null);
   const [userDrawing, setUserDrawing] = useState<boolean>(false);
 
-  const deleteById = (index: number) => useShapeStore.setState({ shapes: listOfShapes.filter((item, ind) => item[ind] !== item[index]) });
+  const deleteById = (index: number) =>
+    useShapeStore.setState({
+      shapes: listOfShapes.filter((_, ind) => ind !== index),
+    });
 
   const { getTempShapes, addTempShape } = useTempShapes();
 
@@ -28,16 +31,33 @@ function Canvas() {
     if (!isDeleteMode) return;
     const DISTANCE_THRESHOLD = 15;
 
-    listOfShapes.forEach((shape, id) => {
+    listOfShapes.forEach((shape, idx) => {
       shape.forEach((coord) => {
         const distance = Math.sqrt(Math.pow(coord.x - x, 2) + Math.pow(coord.y - y, 2));
 
         if (distance < DISTANCE_THRESHOLD) {
-          deleteById(id);
+          deleteById(idx);
         }
       });
     });
   }
+
+  const redrawShapes = () => {
+    if (!context) return;
+    listOfShapes?.forEach((shape) => {
+      if (shape.length < 2) return;
+
+      context.beginPath();
+      context.moveTo(shape[0].x, shape[0].y);
+
+      for (let i = 1; i < shape.length; i++) {
+        context.lineTo(shape[i].x, shape[i].y);
+      }
+
+      context.lineTo(shape[0].x, shape[0].y);
+      context.stroke();
+    });
+  };
 
   useEffect(() => {
     if (!context || !canvasRef.current) return;
@@ -46,14 +66,7 @@ function Canvas() {
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     context.setTransform(scale, 0, 0, scale, skew, skew);
 
-    listOfShapes?.forEach((shape) => {
-      context.beginPath();
-      shape.forEach((coord) => {
-        context.lineTo(coord.x, coord.y);
-      });
-      context.closePath();
-      context.stroke();
-    });
+    redrawShapes();
   }, [listOfShapes, context, scale]);
 
   useEffect(() => {
@@ -70,6 +83,25 @@ function Canvas() {
     setContext(context);
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (!canvasRef.current) return;
+      canvasRef.current.width = window.innerWidth * 0.75;
+      canvasRef.current.height = window.innerHeight - 30;
+      if (context) {
+        context.lineCap = 'round';
+        context.strokeStyle = '#1d1c2b';
+        context.lineWidth = 5;
+        context.imageSmoothingQuality = 'high';
+
+        redrawShapes();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [context]);
+
   function draw({ nativeEvent: { offsetX, offsetY } }: MouseEvent<HTMLCanvasElement>) {
     if (!userDrawing || isDeleteMode) return;
     addTempShape({ x: offsetX, y: offsetY });
@@ -81,7 +113,6 @@ function Canvas() {
 
   function startDraw({ nativeEvent: { offsetX, offsetY } }: MouseEvent<HTMLCanvasElement>) {
     if (isDeleteMode) {
-      console.log(`Deleting with offsetX: ${offsetX} and offsetY:  ${offsetY}`);
       deleteItem(offsetX, offsetY);
       return;
     }
