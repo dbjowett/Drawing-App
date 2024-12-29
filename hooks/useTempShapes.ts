@@ -1,16 +1,18 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { ShapeCoords } from '../types';
 
 export const useTempShapes = () => {
   const tempShapes = useRef<ShapeCoords[]>([]);
 
-  const addTempShape = (shapes: ShapeCoords) => tempShapes.current.push(shapes);
+  const addTempShape = useCallback((point: ShapeCoords) => {
+    tempShapes.current.push(point);
+  }, []);
 
-  const getTempShapes = () => {
-    let arrlist: ShapeCoords[][] = [];
-    arrlist.push(tempShapes.current);
+  const getTempShapes = useCallback(() => {
+    const shapes = [Array.from(tempShapes.current)];
     tempShapes.current = [];
-    return arrlist;
-  };
+    return shapes;
+  }, []);
+
   return { getTempShapes, addTempShape };
 };

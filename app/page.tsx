@@ -5,7 +5,7 @@ import List from '../components/List';
 
 export default function Home() {
   return (
-    <main className="container">
+    <main>
       <Canvas />
       <List />
     </main>
