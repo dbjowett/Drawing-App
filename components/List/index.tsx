@@ -12,7 +12,10 @@ function List() {
   const setScale = (num: number) => useShapeStore.setState({ scale: num });
   const setIsDeleteMode = (bool: boolean) => useShapeStore.setState({ isDeleteMode: bool });
 
-  const deleteById = (index: number) => useShapeStore.setState({ shapes: listOfShapes.filter((item, ind) => item[ind] !== item[index]) });
+  const deleteById = (index: number) =>
+    useShapeStore.setState({
+      shapes: listOfShapes.filter((_, ind) => ind !== index),
+    });
 
   const currentScale = scale.toFixed(2);
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -29,15 +32,11 @@ function List() {
     <div className={styles.sidebarContainer}>
       <h2 className={styles.shapeHeader}>Shapes</h2>
       <ul className={styles.listContainer}>
-        {listOfShapes.length === 0 && (
-          <div className={styles.standInText}>
-            <FaSquare fontSize={6} /> Items will show here
-          </div>
-        )}
+        {listOfShapes.length === 0 && <div className={styles.standInText}>Drawn shapes will show here</div>}
         {listOfShapes.length > 0 &&
           listOfShapes.map((_, index) => (
             <li key={index}>
-              <FaSquare fontSize={6} /> Polygon {index + 1}
+              <FaSquare fontSize={6} /> Shape {index + 1}
               <button className={styles.deleteBtn} onClick={() => deleteById(index)}>
                 <span className={styles.toolTip}>Delete</span>
                 <FaTrashAlt fontSize={12} />
