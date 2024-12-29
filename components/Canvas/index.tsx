@@ -1,24 +1,26 @@
-import { Dispatch, MouseEvent, SetStateAction, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 
 import { useShapeStore } from '../../store';
+import { DrawnShape, ShapeCoords } from '../../types';
 import { shapeArray, storeShapes } from '../../utils/storeShapes';
 import styles from './Canvas.module.css';
-import { DrawnShape, ShapeCoords } from '../../app/page';
 
-interface CanvasProps {
-  deleteById: (arg: number) => void;
-  listOfShapes: DrawnShape[];
-  setListOfShapes: Dispatch<SetStateAction<DrawnShape[]>>;
-}
-
-function Canvas({ deleteById, listOfShapes, setListOfShapes }: CanvasProps) {
+function Canvas() {
   const scale = useShapeStore((state) => state.scale);
   const isDeleteMode = useShapeStore((state) => state.isDeleteMode);
+  const listOfShapes = useShapeStore((state) => state.shapes);
+  const addShapes = (arrlist: DrawnShape[]) => {
+    useShapeStore.setState((state) => ({
+      shapes: [...state.shapes, ...arrlist],
+    }));
+  };
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const [startLocation, setStartLocation] = useState<ShapeCoords | null>(null);
   const [userDrawing, setUserDrawing] = useState<boolean>(false);
+
+  const deleteById = (index: number) => useShapeStore.setState({ shapes: listOfShapes.filter((item, ind) => item[ind] !== item[index]) });
 
   function deleteItem(x: number, y: number) {
     if (!isDeleteMode) return;
@@ -93,10 +95,7 @@ function Canvas({ deleteById, listOfShapes, setListOfShapes }: CanvasProps) {
     context.closePath();
     setUserDrawing(false);
     const arrlist = storeShapes();
-    setListOfShapes((prev) => {
-      const newArray = [...prev, ...arrlist];
-      return newArray;
-    });
+    addShapes(arrlist);
   }
 
   return <canvas className={styles.canvas} ref={canvasRef} onMouseMove={draw} onMouseDown={startDraw} onMouseUp={finishDraw} />;

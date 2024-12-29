@@ -3,17 +3,22 @@ import { FaEraser, FaGithub, FaPen, FaSearchMinus, FaSearchPlus, FaSquare, FaTra
 import { useShapeStore } from '../../store';
 import styles from './List.module.css';
 
-function List({ deleteById, listOfShapes, setListOfShapes }) {
+function List() {
   const scale = useShapeStore((state) => state.scale);
+
+  const listOfShapes = useShapeStore((state) => state.shapes);
   const isDeleteMode = useShapeStore((state) => state.isDeleteMode);
+
   const setScale = (num: number) => useShapeStore.setState({ scale: num });
   const setIsDeleteMode = (bool: boolean) => useShapeStore.setState({ isDeleteMode: bool });
+
+  const deleteById = (index: number) => useShapeStore.setState({ shapes: listOfShapes.filter((item, ind) => item[ind] !== item[index]) });
 
   const currentScale = scale.toFixed(2);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const resetZoom = () => setScale(1);
-  const clearCanvas = () => setListOfShapes([]);
+  const clearCanvas = () => useShapeStore.setState({ shapes: [] });
 
   useEffect(() => {
     if (!scrollRef.current) return;
@@ -29,15 +34,16 @@ function List({ deleteById, listOfShapes, setListOfShapes }) {
             <FaSquare fontSize={6} /> Items will show here
           </div>
         )}
-        {listOfShapes.map((item, index) => (
-          <li key={item}>
-            <FaSquare fontSize={6} /> Polygon {index + 1}
-            <button className={styles.deleteBtn} onClick={() => deleteById(index)}>
-              <span className={styles.toolTip}>Delete</span>
-              <FaTrashAlt fontSize={12} />
-            </button>
-          </li>
-        ))}
+        {listOfShapes.length > 0 &&
+          listOfShapes.map((item, index) => (
+            <li key={item}>
+              <FaSquare fontSize={6} /> Polygon {index + 1}
+              <button className={styles.deleteBtn} onClick={() => deleteById(index)}>
+                <span className={styles.toolTip}>Delete</span>
+                <FaTrashAlt fontSize={12} />
+              </button>
+            </li>
+          ))}
         <div ref={scrollRef}></div>
       </ul>
       {listOfShapes.length > 1 && (
@@ -50,7 +56,7 @@ function List({ deleteById, listOfShapes, setListOfShapes }) {
           <label htmlFor="toggle" className={styles.toggle}>
             <span>{isDeleteMode ? <FaEraser fontSize={20} /> : <FaPen fontSize={20} />}</span>
             <h2>{isDeleteMode ? 'Delete ' : 'Draw '}Mode</h2>
-            <input type="checkbox" id="toggle" value={isDeleteMode} onChange={(e) => setIsDeleteMode(e.target.checked)} />
+            <input type="checkbox" id="toggle" value={isDeleteMode.toString()} onChange={(e) => setIsDeleteMode(e.target.checked)} />
             <div className={styles.slider}></div>
           </label>
         </div>
